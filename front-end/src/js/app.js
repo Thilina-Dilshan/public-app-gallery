@@ -34,8 +34,9 @@ dropZoneElm.on('drop', (evt) => {
     uploadImages(imageFiles);
 });
 mainElm.on('click', '.image:not(.loader)', (evt)=> {
-    // console.log(evt.target);
-    // evt.target.requestFullscreen();
+    if ($(evt.target).hasClass('image')) {
+        evt.target.requestFullscreen();
+    }
 });
 
 function uploadImages(imageFiles){
@@ -50,8 +51,8 @@ function uploadImages(imageFiles){
     const jqxhr = $.ajax(`${REST_API_URL}/images`, {
         method: 'POST',
         data: formData,
-        contentType: false,         // by default jQuery uses application/x-www-form-urlencoded
-        processData: false          // by default jQuery tries to convert the data into String
+        contentType: false,
+        processData: false
     });
 
     jqxhr.done((imageUrlList)=> {
@@ -88,8 +89,6 @@ function loadAllImages() {
                 $(evt.target).find('button').addClass('d-none');
             });
 
-            /*Download button click event*/
-
             mainElm.append(divElm);
         });
     });
@@ -100,7 +99,5 @@ function loadAllImages() {
 mainElm.on('click', 'button', (evt) => {
     const downUrl = $(evt.target).parents('div').css('background-image').replace('url("', '').replace('")', '');;
     const imageName = downUrl.replace(`${REST_API_URL}/images/`, "");
-    // console.log(downUrl);
-    // console.log(imageName);
     saveAs(downUrl, imageName);
 });
